@@ -62,8 +62,10 @@ Util.buildClassificationGrid = async function(data){
 
 Util.buildItemListing = async function(data) {
   let listingHTML = '';
+
   console.dir({data});
-  if(data) {
+
+  if (data) {
     listingHTML = `
       <section class="car-listing">
         <img src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
@@ -75,9 +77,7 @@ Util.buildItemListing = async function(data) {
             ${Number.parseFloat(data.inv_price).toLocaleString('en-US', { style: 'currency', currency: 'USD'})}
           </div>
           <div class="description">
-            <p>
-              ${data.inv_description}
-            </p>
+            <p>${data.inv_description}</p>
             <dl>
               <dt>MILEAGE</dt>
               <dd>${data.inv_miles.toLocaleString('en-US', { style: 'decimal'})}</dd>
@@ -87,17 +87,14 @@ Util.buildItemListing = async function(data) {
               <dd>${data.classification_name}</dd>
             </dl>
           </div>
-
         </div>
       </section>
     `;
-    listingHTML = `
-      <p>Sorry, no vehicles could be found.</p>
-    `
-  }
+  } else {
+    listingHTML = `<p>Sorry, no vehicles could be found.</p>`;}
+
   return listingHTML;
 }
-
 
 
 
