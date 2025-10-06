@@ -1,13 +1,7 @@
 
-<%- include('../partials/header', { title: title, nav: nav }) %>
-
-<main>
 
 <% if (title) { %>
     <h1><%= title %></h1>
     <% } else {res.redirect('/')} %>
 <%- listing %>
 
-</main>
-
-<%- include('../partials/footer') %>

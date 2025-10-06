@@ -24,9 +24,9 @@ invCont.buildByClassificationId = async function (req, res, next) {
 invCont.buildByInventoryId = async function (req, res, next) {
     const inventoryId = req.params.inventoryId;
     const data = await invModel.getInventoryByInventoryId(inventoryId); 
-    const listing = await utilities.buildItemListing(data);
+    const listing = await utilities.buildItemListing(data[0]);
     let nav = await utilities.getNav();
-    const itemName = `${data.inv_make} ${data.inv_model}`;
+    const itemName = `${data[0].inv_make} ${data[0].inv_model}`;
 
     res.render("./inventory/listing", {
         title: itemName,
