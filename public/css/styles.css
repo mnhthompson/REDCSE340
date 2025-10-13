@@ -81,9 +81,8 @@ nav {
   color: var(--secondary-fg);
   background-color: var(--nav-bg);
   width: 100%;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.703);}
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.703);
 
-nav ul {
   display: flex;
   color: var(--primary-fg);
   flex-direction: row;
