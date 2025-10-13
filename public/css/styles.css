@@ -85,6 +85,7 @@ nav {
 
 nav ul {
   display: flex;
+  color: var(--primary-fg);
   flex-direction: row;
   text-decoration: none;
   justify-content: space-around;
