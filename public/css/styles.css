@@ -97,7 +97,7 @@ nav ul {
   
 nav li {
   display: inline-block;
-  color: unset;
+  color: var(--primary-fg);
   text-decoration: none;
   transition: transform .5s;}
 
