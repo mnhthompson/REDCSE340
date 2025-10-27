@@ -266,7 +266,6 @@ module.exports = {
   buildRegister, 
   registerAccount, 
   accountLogin, 
-  buildAccountManagementView, 
   accountLogout, 
   buildUpdate, 
   updateAccount, 
