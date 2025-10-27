@@ -8,4 +8,13 @@ const utilities = require("../utilities");
 router.get("/type/:classificationId", invController.buildByClassificationId);
 router.get("/detail/:inventoryId", utilities.handleErrors(invController.buildByInventoryId));
 
+// Classification routes
+router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification));
+router.post("/add-classification", invValidate.classificationRules(), invValidate.checkClassificationData, utilities.handleErrors(invController.addClassification)); // ...through the appropriate router, where server-side validation middleware is present,... 
+
+// Inventory routes
+router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory));
+router.post("/add-inventory", invValidate.inventoryRules(), invValidate.checkInventoryData, utilities.handleErrors(invController.addInventory));
+
+
 module.exports = router;
