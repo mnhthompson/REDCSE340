@@ -9,7 +9,7 @@
   <%  }) %>
    </ul>
   <% } %>
-<script src="/public/js/script.js"></script>
+
   <form class="input-box" action="/inv/add-inventory" method="post">
     <label>Make<input type="text" value="<%- locals.inv_make %>" placeholder="Smart" name="inv_make" minlength="2" maxlength="50"><span class="fine-print">Required.</span></label>
     <label>Model<input type="text" value="<%- locals.inv_model %>" placeholder="Fortwo" name="inv_model" minlength="2" maxlength="50"><span class="fine-print">Required.</span></label>
@@ -27,3 +27,4 @@
     </label>
     <input type="submit" value="ADD">
   </form>
+  <script src="/public/js/script.js"></script>
