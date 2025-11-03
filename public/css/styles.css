@@ -302,7 +302,7 @@ section.car-listing div.car-information {
 /* Login form  */
 .input-box {
   background-color: var(--secondary-bg);
-  color: var(--secondary-fg);
+  color: var( --nav-bg);
   padding: 1rem;
   display: flex;
   flex-direction: column;
