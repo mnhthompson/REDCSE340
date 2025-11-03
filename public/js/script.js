@@ -41,3 +41,32 @@ function buildInventoryList(data) {
     // Display the contents in the Inventory Management view
     inventoryDisplay.innerHTML = dataTable;
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('form.input-box');
+  if (!form) return;
+
+  // Load saved values
+  for (const element of form.elements) {
+    if (element.name && localStorage.getItem(element.name)) {
+      element.value = localStorage.getItem(element.name);
+    }
+  }
+
+  // Save values on input
+  form.addEventListener('input', (e) => {
+    if (e.target.name) {
+      localStorage.setItem(e.target.name, e.target.value);
+    }
+  });
+
+  // Clear storage on submit
+  form.addEventListener('submit', () => {
+    for (const element of form.elements) {
+      if (element.name) {
+        localStorage.removeItem(element.name);
+      }
+    }
+  });
+});
+

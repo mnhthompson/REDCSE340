@@ -172,7 +172,6 @@ invCont.addInventory = async function (req, res, next) {
       errors: null,
     });
   } else {
-    // This seems to never get called. Is this just for DB errors?
     req.flash("notice", "There was a problem.");
     res.render("inventory/addInventory", {
       title: "Add Vehicle",
