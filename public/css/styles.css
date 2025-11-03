@@ -337,7 +337,7 @@ section.car-listing div.car-information {
   width: fit-content;
   align-self: center;
   background-color: var(--pop);
-  color: white;
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: .5rem;
   box-shadow: 0 0 .5rem rgba(0, 0, 0, 0.368);
