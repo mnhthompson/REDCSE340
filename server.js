@@ -38,6 +38,8 @@ app.use(function(req, res, next){
   next()
 })
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 /* ***********************
  * View Engine and Templates
