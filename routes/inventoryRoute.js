@@ -5,7 +5,8 @@ const invController = require("../controllers/invController")
 const utilities = require("../utilities");
 const invValidate = require("../utilities/inventory-validation");
 
-//router.use(["/add-classification", "/add-inventory"], utilities.checkAuthorizationManager);
+//router.use(["/add-classification", "/add-inventory", "/edit/:inventoryId", "/update", "/delete/:inventoryId", "/delete/",], utilities.checkAuthorizationManager);
+
 
 router.get('/', invController.buildManagementView)
 
@@ -20,6 +21,17 @@ router.post("/add-classification", invValidate.classificationRules(), invValidat
 // Inventory routes
 router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory));
 router.post("/add-inventory", invValidate.inventoryRules(), invValidate.checkInventoryData, utilities.handleErrors(invController.addInventory));
+
+// Build edit inventory views
+router.get("/edit/:inventoryId", utilities.handleErrors(invController.buildEditInventory));
+router.post("/update/", invValidate.inventoryRules(), invValidate.checkUpdateData, utilities.handleErrors(invController.updateInventory));
+
+// Delete vehicle routes
+router.get("/delete/:inventoryId", utilities.handleErrors(invController.buildDeleteInventory));
+router.post("/delete/", utilities.handleErrors(invController.deleteInventory));  // Don't need validation
+
+
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
 
 
 module.exports = router;
