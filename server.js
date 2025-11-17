@@ -16,6 +16,7 @@ const accountRoute = require('./routes/accountRoute.js');
 const utilities = require("./utilities/")
 const session = require("express-session")
 const pool = require('./database/')
+const cookieParser = require("cookie-parser")
 
 /* ***********************
  * Middleware
