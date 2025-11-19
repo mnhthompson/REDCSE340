@@ -5,12 +5,12 @@ const invController = require("../controllers/invController")
 const utilities = require("../utilities");
 const invValidate = require("../utilities/inventory-validation");
 
-//router.use(["/add-classification", "/add-inventory", "/edit/:inventoryId", "/update", "/delete/:inventoryId", "/delete/",], utilities.checkAuthorizationManager);
-
+router.use(["/add-classification", "/add-inventory", "/edit/:inventoryId", "/update", "/delete/:inventoryId", "/delete/",], utilities.checkAuthorizationManager);
 
 router.get('/', invController.buildManagementView)
 
 // Route to build inventory by classification view
+router.get("/", utilities.checkAuthorizationManager ,utilities.handleErrors(invController.buildManagementView));
 router.get("/type/:classificationId", invController.buildByClassificationId);
 router.get("/detail/:inventoryId", utilities.handleErrors(invController.buildByInventoryId));
 
