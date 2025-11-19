@@ -63,6 +63,10 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
 // Inventory routes
 app.use("/inv", inventoryRoute)
 
+// account routes
+app.use("/account", accountRoute)
+
+
 // error routes
 const errorRouter = require("./routes/errorRoute");
 app.use("/", errorRouter); // no prefix
