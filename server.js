@@ -39,10 +39,6 @@ app.use(function (req, res, next) {
   res.locals.messages = require("express-messages")(req, res);
   next();
 });
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ 
-}));
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
