@@ -330,6 +330,7 @@ section.car-listing div.car-information {
 .input-box input:invalid, .input-box textarea:invalid, .input-box select:invalid {
   border-right: 5px solid red;
 }
+
 .input-box input[type="submit"] {
   font-size: 1rem;
   padding-left: 2rem;
