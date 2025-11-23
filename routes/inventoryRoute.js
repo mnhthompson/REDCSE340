@@ -8,6 +8,15 @@ const invValidate = require("../utilities/inventory-validation");
 //router.use(["/add-classification", "/add-inventory", "/edit/:inventoryId", "/update", "/delete/:inventoryId", "/delete/",], utilities.checkAuthorizationManager);
 
 
+//locks
+router.use("/add-classification", utilities.checkLogin);
+router.use("/add-inventory", utilities.checkLogin);
+router.use("/edit/:inventoryId", utilities.checkLogin);
+router.use("/update", utilities.checkLogin);
+router.use("/delete/:inventoryId", utilities.checkLogin);
+router.use("/delete", utilities.checkLogin);
+
+
 router.get('/', invController.buildManagementView)
 
 // Route to build inventory by classification view
