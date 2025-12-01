@@ -21,11 +21,12 @@ invCont.buildByClassificationId = async function (req, res, next) {
   })
 }
 
-invCont.buildByInventoryId = async function (req, res, next) {
-  const inventoryId = req.params.inventoryId;
+invCont.buildByInventoryId = utilities.handleErrors(async function (req, res, next) {
+  const inventoryId = parseInt(req.params.inventoryId);
   const data = await invModel.getInventoryByInventoryId(inventoryId);
-  const reviews = await reviewModel.getReviewsByInventoryId(inventoryId);
-  const account = res.locals.accountData;
+
+  const reviews = await reviewModel.getReviewsByInventoryId(inventoryId) || [];
+  const account = res.locals.accountData || null;
 
   const listing = await utilities.buildItemListing(data, reviews, account);
   const nav = await utilities.getNav();
@@ -36,7 +37,7 @@ invCont.buildByInventoryId = async function (req, res, next) {
     nav,
     listing,
   });
-};
+});
 
 
 
