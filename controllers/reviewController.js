@@ -1,8 +1,10 @@
 const reviewModel = require("../models/review-model");
 const utilities = require("../utilities");
+
 const reviewCont = {};
 
-// Display all reviews in Account Admin
+// View All Reviews (Account)
+
 reviewCont.buildAccountReviews = utilities.handleErrors(async (req, res) => {
   const account = res.locals.accountData;
   if (!account) {
@@ -13,18 +15,21 @@ reviewCont.buildAccountReviews = utilities.handleErrors(async (req, res) => {
   const nav = await utilities.getNav();
   const reviews = await reviewModel.getReviewsByAccountId(account.account_id);
 
-  res.render("account/adminReviews", {
+  return res.render("account/adminReviews", {
     title: "Your Reviews",
     nav,
     reviews,
-    loggedIn: 1,
+    loggedIn: 1
   });
 });
 
-// Build edit review form
+
+// Show Edit Review Form
+
 reviewCont.buildEditReview = utilities.handleErrors(async (req, res) => {
-  const reviewId = parseInt(req.params.reviewId);
+  const reviewId = Number(req.params.reviewId);
   const account = res.locals.accountData;
+
   if (!account) {
     req.flash("notice", "You must be logged in to edit reviews.");
     return res.redirect("/account/login");
@@ -34,41 +39,46 @@ reviewCont.buildEditReview = utilities.handleErrors(async (req, res) => {
   const review = await reviewModel.getReviewById(reviewId);
 
   if (!review || review.account_id !== account.account_id) {
-    req.flash("notice", "You can't edit this review.");
+    req.flash("notice", "You cannot edit this review.");
     return res.redirect("/reviews/account");
   }
 
-  res.render("account/editReview", {
+  return res.render("account/editReview", {
     title: "Edit Review",
     nav,
     review,
-    loggedIn: 1,
+    loggedIn: 1
   });
 });
 
-// Update 
+
+//Update 
+
 reviewCont.updateReview = utilities.handleErrors(async (req, res) => {
-  const { reviewId, review_text } = req.body;
+  const { reviewId, review_text, inv_id } = req.body;
   const account = res.locals.accountData;
 
   if (!account) {
     req.flash("notice", "You must be logged in to update a review.");
-    return res.redirect(`/inv/${req.body.inv_id}`);
+    return res.redirect(`/inv/detail/${inv_id}`);
   }
 
   if (!review_text || review_text.trim() === "") {
-    req.flash("notice", "Review can't be empty.");
+    req.flash("notice", "Review cannot be empty.");
     return res.redirect(`/reviews/edit/${reviewId}`);
   }
 
   await reviewModel.updateReview(reviewId, review_text);
-  req.flash("notice", "Review updated");
-  res.redirect("/reviews/account");
+
+  req.flash("notice", "Review updated successfully.");
+  return res.redirect("/reviews/account");
 });
 
+
 // Delete 
+
 reviewCont.deleteReview = utilities.handleErrors(async (req, res) => {
-  const reviewId = parseInt(req.params.reviewId);
+  const reviewId = Number(req.params.reviewId);
   const account = res.locals.accountData;
 
   if (!account) {
@@ -77,39 +87,43 @@ reviewCont.deleteReview = utilities.handleErrors(async (req, res) => {
   }
 
   const review = await reviewModel.getReviewById(reviewId);
+
   if (!review || review.account_id !== account.account_id) {
-    req.flash("notice", "You can't delete this review.");
+    req.flash("notice", "You cannot delete this review.");
     return res.redirect("/reviews/account");
   }
 
   await reviewModel.deleteReview(reviewId);
-  req.flash("notice", "Review deleted");
-  res.redirect("/reviews/account");
+
+  req.flash("notice", "Review deleted.");
+  return res.redirect("/reviews/account");
 });
 
+
 // Add 
+
 reviewCont.addReview = utilities.handleErrors(async (req, res) => {
   const { review_text, inv_id } = req.body;
   const account = res.locals.accountData;
 
   if (!account) {
     req.flash("notice", "You must be logged in to add a review.");
-    return res.redirect(`/inv/${inv_id}`);
+    return res.redirect(`/inv/detail/${inv_id}`);
   }
 
   if (!review_text || review_text.trim() === "") {
-    req.flash("notice", "Review can't be empty.");
-    return res.redirect(`/inv/${inv_id}`);
+    req.flash("notice", "Review cannot be empty.");
+    return res.redirect(`/inv/detail/${inv_id}`);
   }
 
   await reviewModel.addReview({
     review_text,
     inv_id,
-    account_id: account.account_id,
+    account_id: account.account_id
   });
 
-  req.flash("notice", "Review added");
-  res.redirect(`/inv/${inv_id}`);
+  req.flash("notice", "Review added.");
+  return res.redirect(`/inv/detail/${inv_id}`);
 });
 
 module.exports = reviewCont;

@@ -22,38 +22,19 @@ invCont.buildByClassificationId = async function (req, res, next) {
 }
 
 invCont.buildByInventoryId = async function (req, res, next) {
-  try {
     const inventoryId = req.params.inventoryId;
-
-    const data = await invModel.getInventoryByInventoryId(inventoryId);
-    if (!data) {
-      return res.status(404).send("Vehicle not found");
-    }
-
-    const reviews = (await reviewModel.getReviewsByInventoryId(inventoryId)) || [];
-    const account = res.locals.accountData || null;
-
-    
-    const listing = await utilities.buildItemListing(
-      data,
-      reviews,
-      account,
-      null 
-    );
-
-    const nav = await utilities.getNav();
+    const data = await invModel.getInventoryByInventoryId(inventoryId); 
+    const listing = await utilities.buildItemListing(data);
+    let nav = await utilities.getNav();
     const itemName = `${data.inv_make} ${data.inv_model}`;
+    
 
     res.render("./inventory/listing", {
-      title: itemName,
-      nav,
-      listing,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
+        title: itemName,
+        nav,
+        listing,
+    })
+}
 
 
 /**********************************
