@@ -13,6 +13,7 @@ const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute.js");
 const accountRoute = require('./routes/accountRoute.js');
+const reviewRoute = require("./routes/reviewRoute.js"); 
 const utilities = require("./utilities/")
 const session = require("express-session")
 const pool = require('./database/')
@@ -72,6 +73,8 @@ app.use("/", errorRouter); // no prefix
 app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
+// review routes
+app.use("/reviews", reviewRoute);
 
 /* ***********************
 * Express Error Handler
