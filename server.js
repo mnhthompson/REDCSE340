@@ -33,6 +33,13 @@ const cookieParser = require("cookie-parser")
   name: 'sessionId',
 }))
 
+// Make logged-in user info available in templates
+app.use((req, res, next) => {
+  // session user from login
+  res.locals.accountData = req.session.user || null;
+  next();
+});
+
 
 // Express Messages Middleware
 app.use(require("connect-flash")());
