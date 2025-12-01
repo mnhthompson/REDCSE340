@@ -24,7 +24,8 @@ invCont.buildByClassificationId = async function (req, res, next) {
 
 invCont.buildByInventoryId = utilities.handleErrors(async function (req, res, next) {
   const inventoryId = req.params.inventoryId;
-  const data = await invModel.getInventoryByInventoryId(inventoryId);
+  const dataArr = await invModel.getInventoryByInventoryId(inventoryId);
+  const data = Array.isArray(dataArr) ? dataArr[0] : dataArr; 
   const reviews = await reviewModel.getReviewsByInventoryId(inventoryId); 
   const nav = await utilities.getNav();
   const account = res.locals.accountData || null; 
