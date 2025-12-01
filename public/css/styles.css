@@ -529,3 +529,20 @@ section.car-listing div.car-information {
     margin-bottom: 10px;
   }
 }
+
+/*  review section */
+.watermelon {
+  display: none; /* Hidden by default */
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 700px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Show section when toggled */
+.watermelon.show {
+  display: block;
+}
