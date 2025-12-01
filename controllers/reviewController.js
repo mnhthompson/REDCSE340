@@ -2,30 +2,39 @@ const reviewModel = require("../models/review-model");
 const utilities = require("../utilities");
 const reviewCont = {};
 
-// Display all reviews in Account Admin /
+// Display all reviews in Account Admin
 reviewCont.buildAccountReviews = utilities.handleErrors(async (req, res) => {
-  const accountId = req.session.user.account_id;
+  const account = res.locals.accountData;
+  if (!account) {
+    req.flash("notice", "You must be logged in to view your reviews.");
+    return res.redirect("/account/login");
+  }
+
   const nav = await utilities.getNav();
-  const reviews = await reviewModel.getReviewsByAccountId(accountId);
+  const reviews = await reviewModel.getReviewsByAccountId(account.account_id);
 
   res.render("account/adminReviews", {
     title: "Your Reviews",
     nav,
     reviews,
-    loggedIn: res.locals.loggedin || 0,
+    loggedIn: 1,
   });
 });
 
-//  Build edit review form 
+// Build edit review form
 reviewCont.buildEditReview = utilities.handleErrors(async (req, res) => {
   const reviewId = parseInt(req.params.reviewId);
-  const accountId = req.session.user.account_id;
-  const nav = await utilities.getNav();
+  const account = res.locals.accountData;
+  if (!account) {
+    req.flash("notice", "You must be logged in to edit reviews.");
+    return res.redirect("/account/login");
+  }
 
+  const nav = await utilities.getNav();
   const review = await reviewModel.getReviewById(reviewId);
 
-  if (!review || review.account_id !== accountId) {
-    req.flash("notice", "You cant edit this review.");
+  if (!review || review.account_id !== account.account_id) {
+    req.flash("notice", "You can't edit this review.");
     return res.redirect("/reviews/account");
   }
 
@@ -33,18 +42,22 @@ reviewCont.buildEditReview = utilities.handleErrors(async (req, res) => {
     title: "Edit Review",
     nav,
     review,
-    loggedIn: res.locals.loggedin || 0,
+    loggedIn: 1,
   });
 });
 
-//  Update  
-
+// Update 
 reviewCont.updateReview = utilities.handleErrors(async (req, res) => {
   const { reviewId, review_text } = req.body;
-  const accountId = req.session.user.account_id;
+  const account = res.locals.accountData;
+
+  if (!account) {
+    req.flash("notice", "You must be logged in to update a review.");
+    return res.redirect(`/inv/${req.body.inv_id}`);
+  }
 
   if (!review_text || review_text.trim() === "") {
-    req.flash("notice", "Review cant be empty.");
+    req.flash("notice", "Review can't be empty.");
     return res.redirect(`/reviews/edit/${reviewId}`);
   }
 
@@ -53,14 +66,19 @@ reviewCont.updateReview = utilities.handleErrors(async (req, res) => {
   res.redirect("/reviews/account");
 });
 
-//  Delete 
+// Delete 
 reviewCont.deleteReview = utilities.handleErrors(async (req, res) => {
   const reviewId = parseInt(req.params.reviewId);
-  const accountId = req.session.user.account_id;
+  const account = res.locals.accountData;
+
+  if (!account) {
+    req.flash("notice", "You must be logged in to delete a review.");
+    return res.redirect("/account/login");
+  }
 
   const review = await reviewModel.getReviewById(reviewId);
-  if (!review || review.account_id !== accountId) {
-    req.flash("notice", "You cant delete this review.");
+  if (!review || review.account_id !== account.account_id) {
+    req.flash("notice", "You can't delete this review.");
     return res.redirect("/reviews/account");
   }
 
@@ -69,13 +87,18 @@ reviewCont.deleteReview = utilities.handleErrors(async (req, res) => {
   res.redirect("/reviews/account");
 });
 
-//  Add
+// Add 
 reviewCont.addReview = utilities.handleErrors(async (req, res) => {
   const { review_text, inv_id } = req.body;
-  const account = req.session.user;
+  const account = res.locals.accountData;
+
+  if (!account) {
+    req.flash("notice", "You must be logged in to add a review.");
+    return res.redirect(`/inv/${inv_id}`);
+  }
 
   if (!review_text || review_text.trim() === "") {
-    req.flash("notice", "Review cant be empty.");
+    req.flash("notice", "Review can't be empty.");
     return res.redirect(`/inv/${inv_id}`);
   }
 
