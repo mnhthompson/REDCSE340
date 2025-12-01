@@ -63,7 +63,7 @@ Util.buildClassificationGrid = async function(data){
 /** single listing element */
 
 Util.buildItemListing = async function (data, reviews = [], account = null, pendingReview = null) {
-  
+
   let listingHTML = '';
 
   if (data) {
@@ -71,9 +71,7 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
       <section class="car-listing">
         <img src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
         <div class="car-information">
-          <div>
-            <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
-          </div>
+          <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
           <div>
             ${Number.parseFloat(data.inv_price).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
           </div>
@@ -91,10 +89,10 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
         </div>
 
         <!-- Reviews toggle button -->
-            <button type="button" class="btn btn-outline-primary btn-sm mb-3" 
-              onclick="document.getElementById('reviews-section').classList.toggle('d-none')">
-              ${reviews.length ? `Reviews (${reviews.length})` : 'Reviews'}
-            </button>
+        <button type="button" class="btn btn-outline-primary btn-sm mb-3" 
+                onclick="toggleReviewsSection()">
+          ${reviews.length ? `Reviews (${reviews.length})` : 'Reviews'}
+        </button>
 
         <!-- Reviews section -->
         <section id="reviews-section" class="mt-3 d-none" style="background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
@@ -120,25 +118,35 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
             : `<p>No reviews yet.</p>`}
 
           ${account
-                  ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-4">
-                  <input type="hidden" name="inv_id" value="${data.inv_id}">
-                  <input type="hidden" name="account_id" value="${account.account_id}">
+            ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-4">
+                <input type="hidden" name="inv_id" value="${data.inv_id}">
+                <input type="hidden" name="account_id" value="${account.account_id}">
 
-                  <!-- Label on top -->
-                  <div class="mb-3">
+                <!-- Label on top -->
+                <div class="mb-3">
                   <label for="review_text" class="form-label"><strong>Your Review:</strong></label>
                   <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${pendingReview ? pendingReview.review_text : ''}</textarea>
-                  </div>
+                </div>
 
-                  <!-- Button centered below textarea -->
-                  <div class="text-center">
+                <!-- Button centered below textarea -->
+                <div class="text-center">
                   <button type="submit" class="btn btn-primary mt-2">Submit Review</button>
-                  </div>
-                  </form>
-`
+                </div>
+              </form>`
             : `<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>`}
         </section>
       </section>
+
+      <script>
+        function toggleReviewsSection() {
+          const section = document.getElementById('reviews-section');
+          if (section.classList.contains('d-none')) {
+            section.classList.remove('d-none');
+          } else {
+            section.classList.add('d-none');
+          }
+        }
+      </script>
     `;
   } else {
     listingHTML = `<p>Sorry, no vehicles could be found.</p>`;
@@ -146,7 +154,6 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
 
   return listingHTML;
 };
-
 
 Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications();
