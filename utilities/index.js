@@ -63,6 +63,15 @@ Util.buildClassificationGrid = async function(data){
 /** single listing element */
 
 Util.buildItemListing = async function (data, reviews = [], account = null, pendingReview = null) {
+ 
+    if (!account && req?.cookies?.jwt) {
+    try {
+      account = jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET)
+    } catch (err) {
+      account = null
+    }
+  }
+
   let listingHTML = '';
 
   if (data) {
