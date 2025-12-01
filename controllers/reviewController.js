@@ -15,7 +15,7 @@ reviewCont.buildAccountReviews = utilities.handleErrors(async (req, res) => {
   const nav = await utilities.getNav();
   const reviews = await reviewModel.getReviewsByAccountId(account.account_id);
 
-  return res.render("account/adminReviews", {
+  return res.render("reviews/account", {
     title: "Your Reviews",
     nav,
     reviews,

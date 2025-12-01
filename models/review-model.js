@@ -14,7 +14,7 @@ reviewModel.getReviewsByAccountId = async function (accountId) {
     const result = await pool.query(sql, [accountId]);
     return result.rows;
   } catch (error) {
-    console.error("Error fetching account reviews:", error);
+    console.error("Error fetching account review:", error);
     throw error;
   }
 };
@@ -64,7 +64,7 @@ reviewModel.deleteReview = async function (reviewId) {
 reviewModel.addReview = async function ({ review_text, inv_id, account_id }) {
   try {
     const sql = `
-      INSERT INTO reviews (review_text, inv_id, account_id, review_date)
+      INSERT INTO review (review_text, inv_id, account_id, review_date)
       VALUES ($1, $2, $3, NOW())
       RETURNING *
     `;
@@ -76,7 +76,7 @@ reviewModel.addReview = async function ({ review_text, inv_id, account_id }) {
   }
 };
 
-/*  Get all reviews for an inventory item  */
+/*  Get all review for an inventory item  */
 reviewModel.getReviewsByInventoryId = async function (inv_id) {
   try {
     const sql = `
@@ -89,7 +89,7 @@ reviewModel.getReviewsByInventoryId = async function (inv_id) {
     const result = await pool.query(sql, [inv_id]);
     return result.rows;
   } catch (error) {
-    console.error("Error fetching reviews for inventory:", error);
+    console.error("Error fetching review for inventory:", error);
     throw error;
   }
 };
