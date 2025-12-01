@@ -39,11 +39,11 @@ reviewCont.buildEditReview = utilities.handleErrors(async (req, res) => {
   const review = await reviewModel.getReviewById(reviewId);
 
   if (!review || review.account_id !== account.account_id) {
-    req.flash("notice", "You cant edit this review.");
+    req.flash("notice", "You can't edit this review.");
     return res.redirect("/reviews/account");
   }
 
-  return res.render("account/editReview", {
+  return res.render("reviews/editReview", {
     title: "Edit Review",
     nav,
     review,
@@ -64,14 +64,14 @@ reviewCont.updateReview = utilities.handleErrors(async (req, res) => {
   }
 
   if (!review_text || review_text.trim() === "") {
-    req.flash("notice", "Review cant be empty.");
+    req.flash("notice", "Review can't be empty.");
     return res.redirect(`/reviews/edit/${reviewId}`);
   }
 
   await reviewModel.updateReview(reviewId, review_text);
 
   req.flash("notice", "Review updated successfully.");
-  return res.redirect("/reviews/account");
+  return res.redirect(`/inv/detail/${inv_id}`);
 });
 
 
@@ -89,14 +89,14 @@ reviewCont.deleteReview = utilities.handleErrors(async (req, res) => {
   const review = await reviewModel.getReviewById(reviewId);
 
   if (!review || review.account_id !== account.account_id) {
-    req.flash("notice", "You cant delete this review.");
+    req.flash("notice", "You can't delete this review.");
     return res.redirect("/reviews/account");
   }
 
   await reviewModel.deleteReview(reviewId);
 
-  req.flash("notice", "Review deleted.");
-  return res.redirect("/reviews/account");
+  req.flash("notice", "Review deleted");
+  return res.redirect(`/inv/detail/${review.inv_id}`);
 });
 
 
@@ -112,7 +112,7 @@ reviewCont.addReview = utilities.handleErrors(async (req, res) => {
   }
 
   if (!review_text || review_text.trim() === "") {
-    req.flash("notice", "Review cant be empty.");
+    req.flash("notice", "Review can't be empty.");
     return res.redirect(`/inv/detail/${inv_id}`);
   }
 
@@ -122,7 +122,7 @@ reviewCont.addReview = utilities.handleErrors(async (req, res) => {
     account_id: account.account_id
   });
 
-  req.flash("notice", "Review added.");
+  req.flash("notice", "Review added");
   return res.redirect(`/inv/detail/${inv_id}`);
 });
 
