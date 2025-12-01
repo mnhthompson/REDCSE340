@@ -138,14 +138,9 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
       </section>
 
       <script>
-        function toggleReviewsSection() {
-          const section = document.getElementById('reviews-section');
-          if (section.classList.contains('d-none')) {
-            section.classList.remove('d-none');
-          } else {
-            section.classList.add('d-none');
-          }
-        }
+            function toggleReviewsSection() {
+            const section = document.getElementById('reviews-section');
+            section.classList.toggle('show');}
       </script>
       </section>
     `;

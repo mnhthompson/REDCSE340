@@ -542,7 +542,6 @@ section.car-listing div.car-information {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Show section when toggled */
 .watermelon.show {
   display: block;
 }
