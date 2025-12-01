@@ -26,13 +26,20 @@ invCont.buildByInventoryId = async function (req, res, next) {
     const inventoryId = req.params.inventoryId;
     const data = await invModel.getInventoryByInventoryId(inventoryId); 
     const listing = await utilities.buildItemListing(data);
+    const item = await invModel.getInventoryByInventoryId(inventoryId); 
     let nav = await utilities.getNav();
+    const account = req.session.user || null;
+    const reviews = await reviewModel.getReviewsByInventoryId(inventoryId);
     const itemName = `${data.inv_make} ${data.inv_model}`;
 
     res.render("./inventory/listing", {
         title: itemName,
         nav,
         listing,
+        reviews,
+        inv_id: item.inv_id,
+        account,
+        loggedIn: res.locals.loggedin || 0,
     })
 }
 
