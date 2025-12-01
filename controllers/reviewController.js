@@ -39,7 +39,7 @@ reviewCont.buildEditReview = utilities.handleErrors(async (req, res) => {
   const review = await reviewModel.getReviewById(reviewId);
 
   if (!review || review.account_id !== account.account_id) {
-    req.flash("notice", "You cannot edit this review.");
+    req.flash("notice", "You cant edit this review.");
     return res.redirect("/reviews/account");
   }
 
@@ -64,7 +64,7 @@ reviewCont.updateReview = utilities.handleErrors(async (req, res) => {
   }
 
   if (!review_text || review_text.trim() === "") {
-    req.flash("notice", "Review cannot be empty.");
+    req.flash("notice", "Review cant be empty.");
     return res.redirect(`/reviews/edit/${reviewId}`);
   }
 
@@ -89,7 +89,7 @@ reviewCont.deleteReview = utilities.handleErrors(async (req, res) => {
   const review = await reviewModel.getReviewById(reviewId);
 
   if (!review || review.account_id !== account.account_id) {
-    req.flash("notice", "You cannot delete this review.");
+    req.flash("notice", "You cant delete this review.");
     return res.redirect("/reviews/account");
   }
 
@@ -112,7 +112,7 @@ reviewCont.addReview = utilities.handleErrors(async (req, res) => {
   }
 
   if (!review_text || review_text.trim() === "") {
-    req.flash("notice", "Review cannot be empty.");
+    req.flash("notice", "Review cant be empty.");
     return res.redirect(`/inv/detail/${inv_id}`);
   }
 
