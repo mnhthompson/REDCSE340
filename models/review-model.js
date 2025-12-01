@@ -82,7 +82,7 @@ reviewModel.getReviewsByInventoryId = async function (inv_id) {
     const sql = `
       SELECT r.review_id, r.review_text, r.review_date, r.account_id, a.account_firstname, a.account_lastname
       FROM review r
-      JOIN accounts a ON r.account_id = a.account_id
+      JOIN account a ON r.account_id = a.account_id
       WHERE r.inv_id = $1
       ORDER BY r.review_date DESC
     `;
