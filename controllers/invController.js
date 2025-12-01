@@ -21,25 +21,20 @@ invCont.buildByClassificationId = async function (req, res, next) {
   })
 }
 
+invCont.buildByInventoryId = async function (req, res, next) {
+    const inventoryId = req.params.inventoryId;
+    const data = await invModel.getInventoryByInventoryId(inventoryId); 
+    const listing = await utilities.buildItemListing(data);
+    let nav = await utilities.getNav();
+    const itemName = `${data.inv_make} ${data.inv_model}`;
+    
 
-invCont.buildByInventoryId = utilities.handleErrors(async function (req, res, next) {
-  const inventoryId = req.params.inventoryId;
-  const dataArr = await invModel.getInventoryByInventoryId(inventoryId);
-  const data = Array.isArray(dataArr) ? dataArr[0] : dataArr; 
-  const reviews = await reviewModel.getReviewsByInventoryId(inventoryId); 
-  const nav = await utilities.getNav();
-  const account = res.locals.accountData || null; 
-  const itemName = `${data.inv_make} ${data.inv_model}`;
-
-  const listing = await utilities.buildItemListing(data, reviews, account);
-
-  res.render("./inventory/listing", {
-    title: itemName,
-    nav,
-    listing,
-  });
-});
-
+    res.render("./inventory/listing", {
+        title: itemName,
+        nav,
+        listing,
+    })
+}
 
 
 /**********************************
