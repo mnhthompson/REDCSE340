@@ -133,7 +133,7 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
                     </div>
                   </div>
               </form>`
-            : `<p class="watermelon">You can add a review by <a href="/account/login">logging in</a>.</p>`}
+            : `<p class="pumpkin">You can add a review by <a href="/account/login">logging in</a>.</p>`}
         </section>
       </section>
 
