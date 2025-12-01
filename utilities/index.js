@@ -71,7 +71,9 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
       <section class="car-listing">
         <img src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
         <div class="car-information">
-          <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
+          <div>
+            <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
+          </div>
           <div>
             ${Number.parseFloat(data.inv_price).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
           </div>
@@ -121,14 +123,10 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
             ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-4">
                 <input type="hidden" name="inv_id" value="${data.inv_id}">
                 <input type="hidden" name="account_id" value="${account.account_id}">
-
-                <!-- Label on top -->
                 <div class="mb-3">
                   <label for="review_text" class="form-label"><strong>Your Review:</strong></label>
                   <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${pendingReview ? pendingReview.review_text : ''}</textarea>
                 </div>
-
-                <!-- Button centered below textarea -->
                 <div class="text-center">
                   <button type="submit" class="btn btn-primary mt-2">Submit Review</button>
                 </div>
