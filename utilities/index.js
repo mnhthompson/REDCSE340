@@ -62,79 +62,79 @@ Util.buildClassificationGrid = async function(data){
 
 /** single listing element */
 
-Util.buildItemListing = async function (data, reviews = [], account = null, pendingReview = null) {
+Util.buildItemListing = async function (data, reviews = [], account = null) {
+  if (!data) return `<p>Sorry, no vehicles could be found.</p>`;
 
-  let listingHTML = '';
+  // Sort reviews newest first
+  const sortedReviews = reviews.sort(
+    (a, b) => new Date(b.review_date) - new Date(a.review_date)
+  );
 
-  if (data) {
-    listingHTML = `
-      <section class="car-listing">
-        <img src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
-        <div class="car-information">
-          <div>
-            <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
-          </div>
-          <div>
-            ${Number.parseFloat(data.inv_price).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
-          </div>
-          <div class="description">
-            <p>${data.inv_description}</p>
-            <dl>
-              <dt>MILEAGE</dt>
-              <dd>${data.inv_miles.toLocaleString('en-US')}</dd>
-              <dt>COLOR</dt>
-              <dd>${data.inv_color}</dd>
-              <dt>CLASS</dt>
-              <dd>${data.classification_name}</dd>
-            </dl>
-          </div>
+  let reviewsHTML = sortedReviews.length
+    ? sortedReviews
+        .map((r) => {
+          const firstInitial = r.account_firstname ? r.account_firstname[0] : "";
+          const lastNoSpaces = r.account_lastname
+            ? r.account_lastname.replace(/\s+/g, "")
+            : "";
+          const screenName = firstInitial + lastNoSpaces;
+          return `
+            <article class="review card mb-3 p-3">
+              <div class="review-meta small text-muted">
+                <strong>${screenName}</strong> — ${new Date(r.review_date).toLocaleString()}
+              </div>
+              <div class="review-text mt-2">${r.review_text}</div>
+            </article>
+          `;
+        })
+        .join("")
+    : `<p>No reviews yet.</p>`;
+
+  // Review form for logged-in users
+  let reviewFormHTML = "";
+  if (account) {
+    reviewFormHTML = `
+      <form id="addReviewForm" action="/reviews/add" method="POST" class="mt-3">
+        <input type="hidden" name="inv_id" value="${data.inv_id}">
+        <div class="mb-2">
+          <label for="review_text" class="form-label">Your review</label>
+          <textarea id="review_text" name="review_text" rows="4" class="form-control" required></textarea>
         </div>
-
-        <!-- Reviews toggle button -->
-        <button type="button" class="btn btn-secondary mb-2" onclick="document.getElementById('reviews-section').classList.toggle('d-none')">
-          Reviews (${reviews.length})
-        </button>
-
-        <!-- Reviews section -->
-        <section id="reviews-section" class="mt-2 d-none">
-          ${reviews && reviews.length
-            ? reviews
-                .sort((a, b) => new Date(b.review_date) - new Date(a.review_date))
-                .map(r => {
-                  const firstInitial = r.account_firstname ? r.account_firstname.charAt(0) : '';
-                  const lastNoSpaces = r.account_lastname ? r.account_lastname.replace(/\s+/g, '') : '';
-                  const screenName = firstInitial + lastNoSpaces;
-                  return `
-                    <article class="review card mb-3 p-3">
-                      <div class="review-meta small text-muted">
-                        <strong>${screenName}</strong> — ${new Date(r.review_date).toLocaleString()}
-                      </div>
-                      <div class="review-text mt-2">${r.review_text}</div>
-                    </article>
-                  `;
-                })
-                .join('')
-            : `<p>No reviews yet.</p>`}
-
-          ${account
-            ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-3">
-                 <input type="hidden" name="inv_id" value="${data.inv_id}">
-                 <input type="hidden" name="account_id" value="${account.account_id}">
-                 <div class="mb-2">
-                   <label for="review_text" class="form-label">Your review</label>
-                   <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${pendingReview ? pendingReview.review_text : ''}</textarea>
-                 </div>
-                 <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
-               </form>`
-            : `<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>`}
-        </section>
-      </section>
+        <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
+      </form>
     `;
   } else {
-    listingHTML = `<p>Sorry, no vehicles could be found.</p>`;
+    reviewFormHTML = `<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>`;
   }
 
-  return listingHTML;
+  return `
+    <section class="car-listing">
+      <img src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
+      <div class="car-information">
+        <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
+        <div>${Number.parseFloat(data.inv_price).toLocaleString("en-US", { style: "currency", currency: "USD" })}</div>
+        <div class="description">
+          <p>${data.inv_description}</p>
+          <dl>
+            <dt>MILEAGE</dt><dd>${data.inv_miles.toLocaleString()}</dd>
+            <dt>COLOR</dt><dd>${data.inv_color}</dd>
+            <dt>CLASS</dt><dd>${data.classification_name}</dd>
+          </dl>
+        </div>
+      </div>
+
+      <!-- Reviews toggle button -->
+      <button type="button" class="btn btn-secondary mb-2" onclick="document.getElementById('reviews-section').classList.toggle('d-none')">
+        Reviews (${reviews.length})
+      </button>
+
+      <!-- Reviews section -->
+      <section id="reviews-section" class="mt-2 d-none">
+        ${reviewsHTML}
+        ${reviewFormHTML}
+      </section>
+    </section>
+  `;
 };
 
 
