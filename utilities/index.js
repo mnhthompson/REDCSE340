@@ -120,17 +120,19 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
             : `<p>No reviews yet.</p>`}
 
           ${account
-            ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-4">
-                 <input type="hidden" name="inv_id" value="${data.inv_id}">
-                 <input type="hidden" name="account_id" value="${account.account_id}">
-                 <div class="mb-2">
-                   <label for="review_text" class="form-label"><strong>Your Review</strong></label>
-                   <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${pendingReview ? pendingReview.review_text : ''}</textarea>
-                 </div>
-                 <div class="text-center">
-                   <button type="submit" class="btn btn-primary">Submit Review</button>
-                 </div>
-               </form>`
+              ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-4">
+                  <input type="hidden" name="inv_id" value="${data.inv_id}">
+                  <input type="hidden" name="account_id" value="${account.account_id}">
+
+                  <div class="mb-3 d-flex flex-column">
+                  <label for="review_text" class="form-label"><strong>Your Review:</strong></label>
+                  <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${pendingReview ? pendingReview.review_text : ''}</textarea>
+                  </div>
+
+                  <div class="d-flex justify-content-center">
+                  <button type="submit" class="btn btn-primary">Submit Review</button>
+                  </div>
+              </form>`
             : `<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>`}
         </section>
       </section>
