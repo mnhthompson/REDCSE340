@@ -87,61 +87,73 @@ Util.buildItemListing = async function(data, reviews = [], account = null, pendi
               <dd>${data.classification_name}</dd>
             </dl>
           </div>
-          
-          <div id="reviews" class="mt-4">
-            <button type="button" class="btn btn-secondary mb-2" onclick="this.nextElementSibling.classList.toggle('d-none')">
-              Reviews (${reviews ? reviews.length : 0})
-            </button>
-            <div class="reviews-container ${reviews && reviews.length > 0 ? '' : 'd-none'}">
-              ${!reviews || reviews.length === 0
-                ? '<p>No reviews yet.</p>'
-                : reviews.map(r => {
-                    const firstInitial = r.account_firstname ? r.account_firstname.charAt(0) : '';
-                    const lastNoSpaces = r.account_lastname ? r.account_lastname.replace(/\s+/g,'') : '';
-                    const screenName = firstInitial + lastNoSpaces;
-                    return `
-                      <article class="review card mb-3 p-3">
-                        <div class="review-meta small text-muted">
-                          <strong>${screenName}</strong> — ${new Date(r.review_date).toLocaleString()}
-                        </div>
-                        <div class="review-text mt-2">${r.review_text}</div>
-                      </article>
-                    `;
-                  }).join('')}
-              
-              ${!account
-                ? '<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>'
-                : `
-                  <form id="addReviewForm" action="/reviews/add" method="POST" class="mt-3">
-                    <div class="mb-2">
-                      <label for="screen_name" class="form-label">Screen name</label>
-                      <input type="text" id="screen_name" class="form-control" 
-                             value="${account.first_name ? account.first_name.charAt(0) : ''}${account.last_name ? account.last_name.replace(/\s+/g,'') : ''}" readonly>
-                    </div>
-                    <div class="mb-2">
-                      <label for="review_text" class="form-label">Your review</label>
-                      <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${pendingReview ? pendingReview.review_text : ''}</textarea>
-                    </div>
-                    <input type="hidden" name="inv_id" value="${data.inv_id}">
-                    <button type="submit" class="btn btn-primary">Submit Review</button>
-                  </form>
-                `}
-            </div>
-          </div>
-
         </div>
-      </section>
+    `;
 
-      <style>
-        .d-none { display: none; }
-      </style>
+    // Build reviews HTML
+    let reviewsHTML = '';
+    if (!reviews || reviews.length === 0) {
+      reviewsHTML = `<p>No reviews yet.</p>`;
+    } else {
+      reviews.forEach(r => {
+        const firstInitial = r.account_firstname ? r.account_firstname.charAt(0) : '';
+        const lastNoSpaces = r.account_lastname ? r.account_lastname.replace(/\s+/g,'') : '';
+        const screenName = firstInitial + lastNoSpaces;
+        reviewsHTML += `
+          <article class="review card mb-3 p-3">
+            <div class="review-meta small text-muted">
+              <strong>${screenName}</strong> — ${new Date(r.review_date).toLocaleString()}
+            </div>
+            <div class="review-text mt-2">${r.review_text}</div>
+          </article>
+        `;
+      });
+    }
+
+    // Build review form if logged in
+    let reviewFormHTML = '';
+    if (account) {
+      const screenName = (account.first_name ? account.first_name.charAt(0) : '') +
+                         (account.last_name ? account.last_name.replace(/\s+/g,'') : '');
+      reviewFormHTML = `
+        <form id="addReviewForm" action="/reviews/add" method="POST" class="mt-3">
+          <div class="mb-2">
+            <label for="screen_name" class="form-label">Screen name</label>
+            <input type="text" id="screen_name" class="form-control" value="${screenName}" readonly>
+          </div>
+          <div class="mb-2">
+            <label for="review_text" class="form-label">Your review</label>
+            <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${
+              pendingReview ? pendingReview.review_text : ''
+            }</textarea>
+          </div>
+          <input type="hidden" name="inv_id" value="${data.inv_id}">
+          <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
+        </form>
+      `;
+    } else {
+      reviewFormHTML = `<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>`;
+    }
+
+    listingHTML += `
+      <button type="button" class="btn btn-secondary mb-2"
+              onclick="this.nextElementSibling.classList.toggle('d-none')">
+        Reviews (${reviews ? reviews.length : 0})
+      </button>
+
+      <section id="reviews" class="mt-2 d-none">
+        ${reviewsHTML}
+        ${reviewFormHTML}
+      </section>
+    </section> <!-- end car-listing -->
     `;
   } else {
     listingHTML = `<p>Sorry, no vehicles could be found.</p>`;
   }
 
   return listingHTML;
-};
+}
+
 
 Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications();
