@@ -61,7 +61,8 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
 
 //app.get("/",function(req,res){res.render("index",{title:"Home"})})
 
-
+// review routes
+app.use("/reviews", reviewRoute);
 // Inventory routes
 app.use("/inv", inventoryRoute)
 // account routes
@@ -73,8 +74,7 @@ app.use("/", errorRouter); // no prefix
 app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
-// review routes
-app.use("/reviews", reviewRoute);
+
 
 /* ***********************
 * Express Error Handler

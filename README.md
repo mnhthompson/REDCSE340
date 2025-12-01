@@ -1,9 +1,4 @@
-## Getting Started
 
-This document is intended to get you started quickly in building a backend driven Node.js application complete with pages and content, backend logic and a PostgreSQL database for data storage.
-## Prerequisites
-
-The ony prerequisite software required to have installed at this point is Git for version control and a code editor - we will use VS Code (VSC).
 
 ## Package Management
 
