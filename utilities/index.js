@@ -62,7 +62,7 @@ Util.buildClassificationGrid = async function(data){
 
 /** single listing element */
 
-Util.buildItemListing = async function(data, reviews = [], account = null, pendingReview = null) {
+Util.buildItemListing = async function (data, reviews = [], account = null, pendingReview = null) {
   let listingHTML = '';
 
   if (data) {
@@ -74,13 +74,13 @@ Util.buildItemListing = async function(data, reviews = [], account = null, pendi
             <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
           </div>
           <div>
-            ${Number.parseFloat(data.inv_price).toLocaleString('en-US', { style: 'currency', currency: 'USD'})}
+            ${Number.parseFloat(data.inv_price).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
           </div>
           <div class="description">
             <p>${data.inv_description}</p>
             <dl>
               <dt>MILEAGE</dt>
-              <dd>${data.inv_miles.toLocaleString('en-US', { style: 'decimal'})}</dd>
+              <dd>${data.inv_miles.toLocaleString('en-US')}</dd>
               <dt>COLOR</dt>
               <dd>${data.inv_color}</dd>
               <dt>CLASS</dt>
@@ -90,55 +90,42 @@ Util.buildItemListing = async function(data, reviews = [], account = null, pendi
         </div>
 
         <!-- Reviews toggle button -->
-        <button type="button" class="btn btn-secondary mb-2" onclick="this.nextElementSibling.classList.toggle('d-none')">
+        <button type="button" class="btn btn-secondary mb-2" onclick="document.getElementById('reviews-section').classList.toggle('d-none')">
           Reviews (${reviews.length})
         </button>
 
         <!-- Reviews section -->
-        <section id="reviews" class="mt-2 d-none">
-          ${
-            (!reviews || reviews.length === 0)
-              ? `<p>No reviews yet.</p>`
-              : reviews
-                  .sort((a, b) => new Date(b.review_date) - new Date(a.review_date))
-                  .map(r => {
-                    const firstInitial = r.account_firstname ? r.account_firstname.charAt(0) : '';
-                    const lastNoSpaces = r.account_lastname ? r.account_lastname.replace(/\s+/g,'') : '';
-                    const screenName = firstInitial + lastNoSpaces;
-                    return `
-                      <article class="review card mb-3 p-3">
-                        <div class="review-meta small text-muted">
-                          <strong>${screenName}</strong> — ${new Date(r.review_date).toLocaleString()}
-                        </div>
-                        <div class="review-text mt-2">${r.review_text}</div>
-                      </article>
-                    `;
-                  })
-                  .join('')
-          }
+        <section id="reviews-section" class="mt-2 d-none">
+          ${reviews && reviews.length
+            ? reviews
+                .sort((a, b) => new Date(b.review_date) - new Date(a.review_date))
+                .map(r => {
+                  const firstInitial = r.account_firstname ? r.account_firstname.charAt(0) : '';
+                  const lastNoSpaces = r.account_lastname ? r.account_lastname.replace(/\s+/g, '') : '';
+                  const screenName = firstInitial + lastNoSpaces;
+                  return `
+                    <article class="review card mb-3 p-3">
+                      <div class="review-meta small text-muted">
+                        <strong>${screenName}</strong> — ${new Date(r.review_date).toLocaleString()}
+                      </div>
+                      <div class="review-text mt-2">${r.review_text}</div>
+                    </article>
+                  `;
+                })
+                .join('')
+            : `<p>No reviews yet.</p>`}
 
-          ${
-            account
-              ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-3">
-                  <div class="mb-2">
-                    <label for="screen_name" class="form-label">Screen name</label>
-                    <input type="text" id="screen_name" class="form-control" value="${
-                      (account.account_firstname ? account.account_firstname.charAt(0) : '') +
-                      (account.account_lastname ? account.account_lastname.replace(/\s+/g,'') : '')
-                    }" readonly>
-                  </div>
-                  <div class="mb-2">
-                    <label for="review_text" class="form-label">Your review</label>
-                    <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${
-                      pendingReview ? pendingReview.review_text : ''
-                    }</textarea>
-                  </div>
-                  <input type="hidden" name="inv_id" value="${data.inv_id}">
-                  <input type="hidden" name="account_id" value="${account.account_id}">
-                  <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
-                </form>`
-              : `<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>`
-          }
+          ${account
+            ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-3">
+                 <input type="hidden" name="inv_id" value="${data.inv_id}">
+                 <input type="hidden" name="account_id" value="${account.account_id}">
+                 <div class="mb-2">
+                   <label for="review_text" class="form-label">Your review</label>
+                   <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${pendingReview ? pendingReview.review_text : ''}</textarea>
+                 </div>
+                 <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
+               </form>`
+            : `<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>`}
         </section>
       </section>
     `;
@@ -147,7 +134,7 @@ Util.buildItemListing = async function(data, reviews = [], account = null, pendi
   }
 
   return listingHTML;
-}
+};
 
 
 Util.buildClassificationList = async function (classification_id = null) {
