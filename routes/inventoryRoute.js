@@ -21,7 +21,7 @@ router.get('/', invController.buildManagementView)
 
 // Route to build inventory by classification view
 router.get("/type/:classificationId", invController.buildByClassificationId);
-router.get("/detail/:inventoryId", utilities.handleErrors(invController.buildByInventoryId));
+router.get("/detail/:inventoryId",  utilities.checkJWTToken, utilities.handleErrors(invController.buildByInventoryId));
 
 // Classification routes
 router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification));
