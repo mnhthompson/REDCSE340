@@ -23,28 +23,21 @@ invCont.buildByClassificationId = async function (req, res, next) {
 
 invCont.buildByInventoryId = async function (req, res, next) {
   const inventoryId = req.params.inventoryId;
+  const data = await invModel.getInventoryByInventoryId(inventoryId);
+  const reviews = await reviewModel.getReviewsByInventoryId(inventoryId);
+  const account = res.locals.accountData;
 
-  const rawData = await invModel.getInventoryByInventoryId(inventoryId);
-  const data = rawData[0];  
-
-  if (!data) {
-    req.flash("notice", "Vehicle not found.");
-    return res.redirect("/inv");
-  }
-
-  const listing = await utilities.buildItemListing(data);
+  const listing = await utilities.buildItemListing(data, reviews, account);
   const nav = await utilities.getNav();
-
   const itemName = `${data.inv_make} ${data.inv_model}`;
 
   res.render("./inventory/listing", {
     title: itemName,
     nav,
     listing,
-    inv_id: data.inv_id,      
-    item: data,               
   });
 };
+
 
 
 
