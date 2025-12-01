@@ -27,8 +27,7 @@ invCont.buildByInventoryId = async function (req, res, next) {
     const listing = await utilities.buildItemListing(data);
     let nav = await utilities.getNav();
     const itemName = `${data.inv_make} ${data.inv_model}`;
-    const account = res.locals.accountData || null; 
-    const reviews = await reviewModel.getReviewsByInventoryId(inventoryId);
+  
 
     res.render("./inventory/listing", {
         title: itemName,
