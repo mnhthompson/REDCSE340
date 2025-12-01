@@ -5,6 +5,7 @@
     <% } else {res.redirect('/')} %>
 <%- listing %>
 
+
 <section id="reviews" class="container mt-5">
   <h2>Reviews (<%= reviews ? reviews.length : 0 %>)</h2>
 
@@ -37,10 +38,10 @@
       <div class="mb-2">
         <label for="review_text" class="form-label">Your review</label>
         <textarea id="review_text" name="review_text" rows="4" class="form-control" required>
-<%= review_text || (pendingReview ? pendingReview.review_text : '') %>
+<%= pendingReview ? pendingReview.review_text : '' %>
         </textarea>
       </div>
-      <input type="hidden" name="inv_id" value="<%= item.inv_id %>">
+      <input type="hidden" name="inv_id" value="<%= inv_id %>">
       <button type="submit" class="btn btn-primary">Submit Review</button>
     </form>
   <% } %>
