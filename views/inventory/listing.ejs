@@ -7,37 +7,40 @@
 
 
 <section id="reviews" class="container mt-5">
-  <h2>Reviews (<%= Array.isArray(reviews) ? reviews.length : 0 %>)</h2>
+  <h2>Reviews (<%= reviews ? reviews.length : 0 %>)</h2>
 
-  <% if (Array.isArray(reviews) && reviews.length > 0) { %>
-    <% reviews.forEach(r => { %>
+  <% if (!reviews || reviews.length === 0) { %>
+    <p>No reviews yet.</p>
+  <% } else { %>
+    <% reviews.forEach(r => { 
+         const firstInitial = r.account_firstname ? r.account_firstname.charAt(0) : '';
+         const lastNoSpaces = r.account_lastname ? r.account_lastname.replace(/\s+/g,'') : '';
+         const screenName = firstInitial + lastNoSpaces;
+    %>
       <article class="review card mb-3 p-3">
         <div class="review-meta small text-muted">
-          <strong><%= r.account_firstname ? r.account_firstname.charAt(0) : '' %><%= r.account_lastname ? r.account_lastname.replace(/\s+/g,'') : '' %></strong>
-          — <%= r.review_date ? r.review_date : '' %>
+          <strong><%= screenName %></strong> — <%= new Date(r.review_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
         </div>
         <div class="review-text mt-2"><%= r.review_text %></div>
       </article>
     <% }) %>
-  <% } else { %>
-    <p>No reviews yet.</p>
   <% } %>
 
-  <% if (account && inv_id) { %>
+  <% if (!account) { %>
+    <p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>
+  <% } else { %>
     <form id="addReviewForm" action="/reviews/add" method="POST" class="mt-3">
       <div class="mb-2">
         <label for="screen_name" class="form-label">Screen name</label>
         <input type="text" id="screen_name" class="form-control" 
-               value="<%= account.first_name ? account.first_name.charAt(0) : '' %><%= account.last_name ? account.last_name.replace(/\s+/g,'') : '' %>" readonly>
+               value="<%= (account.first_name ? account.first_name.charAt(0) : '') + (account.last_name ? account.last_name.replace(/\s+/g,'') : '') %>" readonly>
       </div>
       <div class="mb-2">
         <label for="review_text" class="form-label">Your review</label>
-        <textarea id="review_text" name="review_text" rows="4" class="form-control" required></textarea>
+        <textarea id="review_text" name="review_text" rows="4" class="form-control" required><%= pendingReview ? pendingReview.review_text : '' %></textarea>
       </div>
       <input type="hidden" name="inv_id" value="<%= inv_id %>">
       <button type="submit" class="btn btn-primary">Submit Review</button>
     </form>
-  <% } else if (!account) { %>
-    <p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>
   <% } %>
 </section>

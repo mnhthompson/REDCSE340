@@ -5,7 +5,6 @@ const utilities = require("../utilities/")
 const invCont = {}
 
 
-
 /* ***************************
  *  Build inventory by classification view
  * ************************** */
@@ -27,17 +26,12 @@ invCont.buildByInventoryId = async function (req, res, next) {
     const data = await invModel.getInventoryByInventoryId(inventoryId); 
     const listing = await utilities.buildItemListing(data);
     let nav = await utilities.getNav();
-    const account = req.session.user || null;
-    const reviews = (await reviewModel.getReviewsByInventoryId(inventoryId)) || [];
     const itemName = `${data.inv_make} ${data.inv_model}`;
 
     res.render("./inventory/listing", {
         title: itemName,
         nav,
         listing,
-        reviews,
-        account,
-        loggedIn: res.locals.loggedin || 0,
     })
 }
 
