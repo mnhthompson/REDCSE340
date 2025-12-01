@@ -3,9 +3,10 @@ const express = require("express");
 const router = new express.Router();
 const reviewController = require("../controllers/reviewController");
 const utilities = require("../utilities");
-const reviewValidate = require("../utilities/review-validation"); // review-specific validation
+const reviewValidate = require("../utilities/review-validation");
 
-// locks
+// Locks 
+
 router.use("/add", utilities.checkLogin);
 router.use("/edit/:reviewId", utilities.checkLogin);
 router.use("/update", utilities.checkLogin);
@@ -19,7 +20,7 @@ router.post(
   utilities.handleErrors(reviewController.addReview)
 );
 
-// Edit 
+// Edit
 router.get(
   "/edit/:reviewId",
   utilities.handleErrors(reviewController.buildEditReview)
@@ -39,17 +40,19 @@ router.post(
   utilities.handleErrors(reviewController.deleteReview)
 );
 
-// Get all reviews for a specific inventory item (for detail view)
+// Get reviews 
 router.get(
   "/inventory/:invId",
   utilities.handleErrors(reviewController.getReviewsByInventory)
 );
 
-// Get all reviews by the logged-in account (for account admin)
+// Admin reviews page 
 router.get(
   "/account",
   utilities.checkLogin,
-  utilities.handleErrors(reviewController.getReviewsByAccount)
+  utilities.handleErrors(reviewController.buildAccountReviews)
 );
+
+
 
 module.exports = router;
