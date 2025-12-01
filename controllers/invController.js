@@ -1,7 +1,6 @@
 const { request } = require("express")
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
-const reviewModel = require("../models/review-model");
 
 const invCont = {}
 
@@ -22,31 +21,32 @@ invCont.buildByClassificationId = async function (req, res, next) {
   })
 }
 
-invCont.buildByInventoryId = utilities.handleErrors(async (req, res, next) => {
-  const inventoryId = parseInt(req.params.inventoryId);
-  const data = await invModel.getInventoryByInventoryId(inventoryId);
-  if (!data) {
-    req.flash("notice", "Vehicle not found.");
-    return res.redirect("/inv/");
-  }
+invCont.buildByInventoryId = utilities.handleErrors(async function (req, res, next) {
+    const inventoryId = parseInt(req.params.inventoryId);
+    const data = await invModel.getInventoryByInventoryId(inventoryId);
 
-  // Fetch reviews for this vehicle
-  const reviews = await reviewModel.getReviewsByInventoryId(inventoryId);
+    if (!data) {
+        req.flash("notice", "Vehicle not found.");
+        return res.redirect("/inv/");
+    }
 
-  // Get logged-in user if available
-  const account = res.locals.accountData || null;
+    // Fetch reviews for this vehicle
+    const reviews = await reviewModel.getReviewsByInventoryId(inventoryId);
 
-  // Build listing HTML with reviews
-  const listingHTML = await utilities.buildItemListing(data, reviews, account);
+    // Get logged-in user if available
+    const account = res.locals.accountData || null;
 
-  const nav = await utilities.getNav();
-  const itemName = `${data.inv_make} ${data.inv_model}`;
+    // Build listing HTML with reviews
+    const listingHTML = await utilities.buildItemListing(data, reviews, account);
 
-  res.render("inventory/listing", {
-    title: itemName,
-    nav,
-    listing: listingHTML,
-  });
+    const nav = await utilities.getNav();
+    const itemName = `${data.inv_make} ${data.inv_model}`;
+
+    res.render("inventory/listing", {
+        title: itemName,
+        nav,
+        listing: listingHTML,
+    });
 });
 
 

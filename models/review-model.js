@@ -6,7 +6,7 @@ reviewModel.getReviewsByAccountId = async function (accountId) {
   try {
     const sql = `
       SELECT r.review_id, r.review_text, r.review_date, r.inv_id, i.inv_make, i.inv_model, i.inv_year
-      FROM reviews r
+      FROM review r
       JOIN inventory i ON r.inv_id = i.inv_id
       WHERE r.account_id = $1
       ORDER BY r.review_date DESC
@@ -22,7 +22,7 @@ reviewModel.getReviewsByAccountId = async function (accountId) {
 /*  Get a single review by ID */
 reviewModel.getReviewById = async function (reviewId) {
   try {
-    const sql = `SELECT * FROM reviews WHERE review_id = $1`;
+    const sql = `SELECT * FROM review WHERE review_id = $1`;
     const result = await pool.query(sql, [reviewId]);
     return result.rows[0];
   } catch (error) {
@@ -35,7 +35,7 @@ reviewModel.getReviewById = async function (reviewId) {
 reviewModel.updateReview = async function (reviewId, reviewText) {
   try {
     const sql = `
-      UPDATE reviews
+      UPDATE review
       SET review_text = $1
       WHERE review_id = $2
       RETURNING *
@@ -51,7 +51,7 @@ reviewModel.updateReview = async function (reviewId, reviewText) {
 /*  Delete a review */
 reviewModel.deleteReview = async function (reviewId) {
   try {
-    const sql = `DELETE FROM reviews WHERE review_id = $1`;
+    const sql = `DELETE FROM review WHERE review_id = $1`;
     await pool.query(sql, [reviewId]);
     return true;
   } catch (error) {
@@ -81,7 +81,7 @@ reviewModel.getReviewsByInventoryId = async function (inv_id) {
   try {
     const sql = `
       SELECT r.review_id, r.review_text, r.review_date, r.account_id, a.account_firstname, a.account_lastname
-      FROM reviews r
+      FROM review r
       JOIN accounts a ON r.account_id = a.account_id
       WHERE r.inv_id = $1
       ORDER BY r.review_date DESC
