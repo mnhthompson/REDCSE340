@@ -99,7 +99,7 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
         </button>
 
         <!-- Reviews section -->
-        <section id="reviews-section" class="mt-3 d-none" style="background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
+        <section id="reviews-section" class="watermelon d-none" style="background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
           <h3 style="margin-top: 0; margin-bottom: 15px;">Reviews</h3>
 
           ${reviews && reviews.length
@@ -114,7 +114,7 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
                       <div class="review-meta small text-muted">
                         <strong>${screenName}</strong> — ${new Date(r.review_date).toLocaleString()}
                       </div>
-                      <div class="review-text mt-2">${r.review_text}</div>
+                      <div class="review-text pumpkin">${r.review_text}</div>
                     </article>
                   `;
                 })
@@ -122,18 +122,18 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
             : `<p>No reviews yet.</p>`}
 
           ${account
-            ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-4">
+            ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="orange">
                 <input type="hidden" name="inv_id" value="${data.inv_id}">
                 <input type="hidden" name="account_id" value="${account.account_id}">
                 <div class="mb-3">
                   <label for="review_text" class="form-label"><strong>Your Review:</strong></label>
                   <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${pendingReview ? pendingReview.review_text : ''}</textarea>
                     <div class="text-center">
-                    <button type="submit" class="btn btn-primary mt-2">Submit Review</button>
+                    <button type="submit" class="btn btn-primary pumpkin">Submit Review</button>
                     </div>
                   </div>
               </form>`
-            : `<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>`}
+            : `<p class="watermelon">You can add a review by <a href="/account/login">logging in</a>.</p>`}
         </section>
       </section>
 

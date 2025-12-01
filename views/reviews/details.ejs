@@ -8,7 +8,7 @@
   </ul>
 <% } %>
 
-<section id="reviews" class="container mt-5">
+<section id="reviews" class="container grape">
   <h2>Reviews (<%= reviews ? reviews.length : 0 %>)</h2>
 
   <% if (!reviews || reviews.length === 0) { %>
@@ -23,15 +23,15 @@
         <div class="review-meta small text-muted">
           <strong><%= screenName %></strong> — <%= new Date(r.review_date).toLocaleString() %>
         </div>
-        <div class="review-text mt-2"><%= r.review_text %></div>
+        <div class="review-text pumpkin"><%= r.review_text %></div>
       </article>
     <% }) %>
   <% } %>
 
   <% if (!account) { %>
-    <p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>
+    <p class="watermelon">You can add a review by <a href="/account/login">logging in</a>.</p>
   <% } else { %>
-    <form id="addReviewForm" action="/reviews/add" method="POST" class="mt-3">
+    <form id="addReviewForm" action="/reviews/add" method="POST" class="watermelon">
       <div class="mb-2">
         <label for="screen_name" class="form-label">Screen name</label>
         <input type="text" id="screen_name" class="form-control" 
