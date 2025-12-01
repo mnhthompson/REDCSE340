@@ -90,6 +90,8 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
           </div>
         </div>
 
+        <section id="car-reviews-section">
+
         <!-- Reviews toggle button -->
         <button type="button" class="btn btn-outline-primary btn-sm mb-3" 
                 onclick="toggleReviewsSection()">
@@ -145,6 +147,7 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
           }
         }
       </script>
+      </section>
     `;
   } else {
     listingHTML = `<p>Sorry, no vehicles could be found.</p>`;
