@@ -43,7 +43,7 @@ reviewCont.buildEditReview = utilities.handleErrors(async (req, res) => {
     return res.redirect("/reviews/account");
   }
 
-  return res.render("reviews/editReview", {
+  return res.render("account/editReview", {
     title: "Edit Review",
     nav,
     review,
