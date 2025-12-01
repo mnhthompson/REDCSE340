@@ -47,9 +47,11 @@ reviewCont.buildEditReview = utilities.handleErrors(async (req, res) => {
     title: "Edit Review",
     nav,
     review,
-    loggedIn: 1
+    loggedIn: 1,
+    errors: null
   });
 });
+
 
 
 //Update 
