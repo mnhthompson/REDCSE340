@@ -504,6 +504,19 @@ section.car-listing div.car-information {
   border-color: #4e555b;
 }
 
+.container.grape .btn-warning {
+  background-color: #ffc107;
+  border: 1px solid #ffc107;
+  color: #212529;
+}
+
+.container.grape .btn-warning:hover {
+  background-color: #e0a800;
+  border-color: #d39e00;
+  color: #fff;
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 576px) {
   .container.grape {
