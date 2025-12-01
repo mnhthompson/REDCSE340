@@ -63,7 +63,7 @@ Util.buildClassificationGrid = async function(data){
 /** single listing element */
 
 Util.buildItemListing = async function (data, reviews = [], account = null, pendingReview = null) {
- 
+  
   let listingHTML = '';
 
   if (data) {
@@ -91,12 +91,15 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
         </div>
 
         <!-- Reviews toggle button -->
-        <button type="button" class="btn btn-secondary mb-2" onclick="document.getElementById('reviews-section').classList.toggle('d-none')">
-          Reviews (${reviews.length})
+        <button type="button" class="btn btn-outline-primary mb-3" 
+                onclick="document.getElementById('reviews-section').classList.toggle('d-none')">
+          ${reviews.length ? `Reviews (${reviews.length})` : 'Reviews'}
         </button>
 
         <!-- Reviews section -->
-        <section id="reviews-section" class="mt-2 d-none">
+        <section id="reviews-section" class="mt-3 d-none" style="background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
+          <h3 style="margin-top: 0; margin-bottom: 15px;">Reviews</h3>
+
           ${reviews && reviews.length
             ? reviews
                 .sort((a, b) => new Date(b.review_date) - new Date(a.review_date))
@@ -105,7 +108,7 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
                   const lastNoSpaces = r.account_lastname ? r.account_lastname.replace(/\s+/g, '') : '';
                   const screenName = firstInitial + lastNoSpaces;
                   return `
-                    <article class="review card mb-3 p-3">
+                    <article class="review card mb-3 p-3" style="background-color: #e9ecef; border: none;">
                       <div class="review-meta small text-muted">
                         <strong>${screenName}</strong> — ${new Date(r.review_date).toLocaleString()}
                       </div>
@@ -117,14 +120,16 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
             : `<p>No reviews yet.</p>`}
 
           ${account
-            ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-3">
+            ? `<form id="addReviewForm" action="/reviews/add" method="POST" class="mt-4">
                  <input type="hidden" name="inv_id" value="${data.inv_id}">
                  <input type="hidden" name="account_id" value="${account.account_id}">
                  <div class="mb-2">
-                   <label for="review_text" class="form-label">Your review</label>
+                   <label for="review_text" class="form-label"><strong>Your Review</strong></label>
                    <textarea id="review_text" name="review_text" rows="4" class="form-control" required>${pendingReview ? pendingReview.review_text : ''}</textarea>
                  </div>
-                 <button type="submit" class="btn btn-primary btn-sm">Submit Review</button>
+                 <div class="text-center">
+                   <button type="submit" class="btn btn-primary">Submit Review</button>
+                 </div>
                </form>`
             : `<p class="mt-3">You can add a review by <a href="/account/login">logging in</a>.</p>`}
         </section>
