@@ -91,10 +91,10 @@ Util.buildItemListing = async function (data, reviews = [], account = null, pend
         </div>
 
         <!-- Reviews toggle button -->
-        <button type="button" class="btn btn-outline-primary mb-3" 
-                onclick="document.getElementById('reviews-section').classList.toggle('d-none')">
-          ${reviews.length ? `Reviews (${reviews.length})` : 'Reviews'}
-        </button>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-3" 
+              onclick="document.getElementById('reviews-section').classList.toggle('d-none')">
+              ${reviews.length ? `Reviews (${reviews.length})` : 'Reviews'}
+            </button>
 
         <!-- Reviews section -->
         <section id="reviews-section" class="mt-3 d-none" style="background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
